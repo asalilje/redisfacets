@@ -1,0 +1,128 @@
+﻿@stars: "\2605", "\2605\2605", "\2605\2605\2605", "\2605\2605\2605\2605", "\2605\2605\2605\2605\2605";
+
+
+.hotel-list {
+    
+    &__row {
+
+        background-color: #f7e8fb;
+
+        &:nth-of-type(2n+1) {
+            background-color: #f1d4fa;
+        }
+    }
+
+    &__header {
+        border-bottom: 1px solid #E6B9F5;
+        font-weight: bold;
+    }
+
+    &__cell {
+        padding: 4px 10px;
+        border-bottom: 1px solid #E6B9F5;
+        border-right: 1px solid #f1d4fa;
+
+        &:first-child {
+            border-left: 1px solid #f1d4fa;
+        }
+
+
+        &--left {
+            text-align: left;
+        }
+
+        &--center {
+            text-align: center;
+        }
+
+        &--right {
+            text-align: right;
+        }
+
+        &--rating {
+            position: relative;
+            width: 84px;
+
+            &:before {
+                content: '\2606\2606\2606\2606\2606';
+                display: block;
+                position: absolute;
+                font-size: 20px;
+                color: magenta;
+                line-height: 22px;
+                top: 0;
+            }
+
+            &:after {
+                color: magenta;
+                display: block;
+                position: absolute;
+                font-size: 20px;
+                content: '';
+                line-height: 22px;
+                top: 0;
+            }
+
+            &[data-value='1']:after {
+                content: extract(@stars, 1);
+            }
+
+            &[data-value='2']:after {
+                content: extract(@stars, 2);
+            }
+
+            &[data-value='3']:after {
+                content: extract(@stars, 3);
+            }
+
+            &[data-value='4']:after {
+                content: extract(@stars, 4);
+            }
+
+            &[data-value='5']:after {
+                content: extract(@stars, 5);
+            }
+        }
+
+        &--check {
+            line-height: 0;
+            text-align: center;
+
+            &:after {
+                content: '';
+                display: inline-block;
+                font-size: 18px;
+            }
+
+            &[data-value='True']:after {
+                content: '\2714';
+                color: green;
+            }
+
+            &[data-value='False']:after {
+                content: '\2718';
+                color: red;
+            }
+        }
+    }
+}
+
+
+.sort-button {
+    cursor: pointer;
+
+    &:after {
+        content: '';
+        margin-left: 10px;
+    }
+
+    &[data-sort-order='asc']:after {
+        content: '▲';
+            
+    }
+
+     &[data-sort-order='desc']:after {
+        content: '▼';
+
+    }
+}

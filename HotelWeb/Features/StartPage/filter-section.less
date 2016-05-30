@@ -1,0 +1,38 @@
+﻿.filter-section {
+    background-color: #f7e8fb;
+
+    &__row {
+        padding: 4px 10px;
+        border-bottom: 1px solid #E6B9F5;
+
+        &:nth-of-type(odd) {
+            background-color: #f1d4fa;
+        }
+
+        &:before {
+            content: attr(data-filter-title);
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            color: #D38CE8;
+        }
+    }
+}
+
+.filter-button {
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background-color: #f7e8fb;
+    border: 1px solid #E6B9F5;
+
+    &[data-filter-active='on'] {
+        background-color: #DB82F9;
+        border: 1px solid #BB4DE0;
+        color: white;
+    }
+   
+}

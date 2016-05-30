@@ -1,0 +1,17 @@
+﻿@model HotelWeb.Data.HotelList
+
+@foreach (var hotel in Model.Hotels)
+            {
+    <tr class="hotel-list__row ">
+        <td class="hotel-list__cell hotel-list__cell--right">@(hotel.Index + 1)</td>
+        <td class="hotel-list__cell hotel-list__cell--left">@hotel.Name</td>
+        <td class="hotel-list__cell hotel-list__cell--left">@hotel.CountryName</td>
+        <td class="hotel-list__cell hotel-list__cell--right">@hotel.PricePerNight</td>
+        <td class="hotel-list__cell hotel-list__cell--rating" data-value="@hotel.Stars"></td>
+        <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Pool"></td>
+        <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Restaurant"></td>
+        <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Bar"></td>
+        <td class="hotel-list__cell hotel-list__cell--left">@hotel.DistanceToBeach m</td>
+        <td class="hotel-list__cell hotel-list__cell--left">@hotel.DistanceToShopping m</td>
+    </tr>
+}

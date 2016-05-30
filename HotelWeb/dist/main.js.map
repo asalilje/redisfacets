@@ -1,0 +1,1 @@
+{"version":3,"sources":["Content/Js/main.js"],"names":[],"mappings":";;AAAA;;;;;;AAEA","file":"Content/Js/main.js","sourcesContent":["import FilterHotels from \"./filter-hotels.js\";\n\nnew FilterHotels();"],"sourceRoot":"/source/"}
