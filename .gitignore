@@ -231,4 +231,4 @@ $RECYCLE.BIN/
 *.lnk
  
 
- HotelWeb/dist/
+ */HotelWeb/dist/*
