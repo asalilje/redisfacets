@@ -6,7 +6,7 @@ namespace HotelWeb.Data
     {
         public class CountryList
         {
-            public IList<Country> Countries { get; set; }
+            public IEnumerable<Country> Countries { get; set; }
         }
 
         public class Country

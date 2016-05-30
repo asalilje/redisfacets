@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using HotelWeb.Data.HotelWeb.Data;
@@ -19,22 +20,25 @@ namespace HotelWeb.Data
 
         public CountryList GetCountries()
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             var db = _connectionMultiplexer.GetDatabase();
+            var countryKeys = db.Sort("Countries", by: "SortByName_*", sortType: SortType.Alphabetic);
+
             var countryList = new CountryList
             {
-                Countries = new List<Country>(),
+                Countries = countryKeys.Select(key => new Country { Key = key, Name = db.StringGet(key.ToString()) }),
             };
-            var countryKeys = db.Sort("Countries", by: "SortByName_*", sortType: SortType.Alphabetic);
-            foreach (var key in countryKeys)
-            {
-                var country = db.StringGet(key.ToString());
-                countryList.Countries.Add(new Country() { Key = key, Name = country });
-            }
+            
+            stopWatch.Stop();
+            Trace.WriteLine("GetCountries: " + stopWatch.ElapsedMilliseconds);
             return countryList;
         }
 
         public HotelList GetHotels(string sortBy = "SortByName", string sortOrder = "asc", string filters = "", int priceMin = int.MinValue, int priceMax = int.MaxValue)
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             var db = _connectionMultiplexer.GetDatabase();
 
             var listKey = $"Hotels";
@@ -80,13 +84,15 @@ namespace HotelWeb.Data
                 hotel.Index = i;
                 hotel.CountryName = db.StringGet($"Countries:{hotel.CountryId}");
                 return hotel;
-            });
+            }).Take(200);
 
             var hotelList = new HotelList
             {
                 Hotels = hotels,
-            }; 
+            };
 
+            stopWatch.Stop();
+            Trace.WriteLine("GetHotels: " + stopWatch.ElapsedMilliseconds);
             return hotelList;
         }
 

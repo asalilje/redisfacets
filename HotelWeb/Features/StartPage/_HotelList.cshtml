@@ -1,17 +1,57 @@
-﻿@model HotelWeb.Data.HotelList
+﻿@model HotelWeb.Features.StartPage.StartPageViewModel
 
-@foreach (var hotel in Model.Hotels)
+<section class="filter-section">
+    <div class="filter-section__row" data-filter-title="Country">
+        @foreach (var country in Model.CountryList.Countries)
+        {
+            <a data-filter-id="@country.Key" class="filter-button" data-filter-group="countryFilters" data-filter-active="@country.IsActive">@country.Name</a>
+        }
+    </div>
+    <div class="filter-section__row" data-filter-title="Price">
+        From: <input type="range" name="priceMin" min="@Model.PriceRange.Min" max="@Model.PriceRange.Max" step="100" value="@Model.PriceRange.Min" size="50" />
+        <span class="priceMinValue"></span>
+        <br />
+        To: <input type="range" name="priceMax" min="@Model.PriceRange.Min" max="@Model.PriceRange.Max" step="100" value="@Model.PriceRange.Max" size="50" />
+        <span class="priceMaxValue"></span>
+    </div>
+</section>
+
+<h2>Total hits: @Model.HotelList.Hotels.Count()</h2>
+
+<section class="hotel-list">
+
+    <table>
+        <tr class="hotel-list__row hotel-list__header">
+            <th></th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByName" data-sort-order=@Model.HotelList.GetSortOrder("SortByName")>Name</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByCountry" data-sort-order=@Model.HotelList.GetSortOrder("SortByCountry")>Country</th>
+            <th class="hotel-list__cell hotel-list__cell--right sort-button" data-sort-by="SortByPrice" data-sort-order=@Model.HotelList.GetSortOrder("SortByPrice")>Price</th>
+            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByStars" data-sort-order=@Model.HotelList.GetSortOrder("SortByStars")>Stars</th>
+            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByPool" data-sort-order=@Model.HotelList.GetSortOrder("SortByPool")>Pool</th>
+            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByRestaurant" data-sort-order=@Model.HotelList.GetSortOrder("SortByRestaurant") Restaurant</th>
+            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByBar" data-sort-order=@Model.HotelList.GetSortOrder("SortByBar")>Bar</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByDistanceToBeach" data-sort-order=@Model.HotelList.GetSortOrder("SortByDistanceToBeach")>Distance beach</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByDistanceToShopping" data-sort-order=@Model.HotelList.GetSortOrder("SortByDistanceToShopping")>Distance shopping</th>
+        </tr>
+        <tbody class="hotel-list__result">
+            @foreach (var hotel in Model.HotelList.Hotels)
             {
-    <tr class="hotel-list__row ">
-        <td class="hotel-list__cell hotel-list__cell--right">@(hotel.Index + 1)</td>
-        <td class="hotel-list__cell hotel-list__cell--left">@hotel.Name</td>
-        <td class="hotel-list__cell hotel-list__cell--left">@hotel.CountryName</td>
-        <td class="hotel-list__cell hotel-list__cell--right">@hotel.PricePerNight</td>
-        <td class="hotel-list__cell hotel-list__cell--rating" data-value="@hotel.Stars"></td>
-        <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Pool"></td>
-        <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Restaurant"></td>
-        <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Bar"></td>
-        <td class="hotel-list__cell hotel-list__cell--left">@hotel.DistanceToBeach m</td>
-        <td class="hotel-list__cell hotel-list__cell--left">@hotel.DistanceToShopping m</td>
-    </tr>
-}
+                <tr class="hotel-list__row ">
+                    <td class="hotel-list__cell hotel-list__cell--right">@(hotel.Index + 1)</td>
+                    <td class="hotel-list__cell hotel-list__cell--left">@hotel.Name</td>
+                    <td class="hotel-list__cell hotel-list__cell--left">@hotel.CountryName</td>
+                    <td class="hotel-list__cell hotel-list__cell--right">@hotel.PricePerNight</td>
+                    <td class="hotel-list__cell hotel-list__cell--rating" data-value="@hotel.Stars"></td>
+                    <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Pool"></td>
+                    <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Restaurant"></td>
+                    <td class="hotel-list__cell hotel-list__cell--check" data-value="@hotel.Bar"></td>
+                    <td class="hotel-list__cell hotel-list__cell--left">@hotel.DistanceToBeach</td>
+                    <td class="hotel-list__cell hotel-list__cell--left">@hotel.DistanceToShopping</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+</section>
+

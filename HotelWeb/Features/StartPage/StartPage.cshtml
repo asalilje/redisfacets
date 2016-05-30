@@ -1,43 +1,6 @@
 ﻿@model HotelWeb.Features.StartPage.StartPageViewModel
 
-<section class="filter-section">
+<div class="hotel-filter-section">
+    @Html.Partial("~/Features/StartPage/_HotelList.cshtml", Model)
+</div>
 
-    <div class="filter-section__row" data-filter-title="Country">
-        @foreach (var country in Model.CountryList.Countries)
-        {
-            <a data-filter-id="@country.Key" class="filter-button" data-filter-active="on">@country.Name</a>
-        }
-    </div>
-
-    <div class="filter-section__row" data-filter-title="Price">
-        <input name="priceMin" type="text" size="5" value=""/>
-        <input name="priceMax" type="text" size="5" value=""/>
-    </div>
-
-</section>
-
-<section class="hotel-list">
-
-   
-    <table>
-        <tr class="hotel-list__row hotel-list__header">
-            <th></th>
-            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByName" data-sort-order="asc">Name</th>
-            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByCountry" data-sort-order="">Country</th>
-            <th class="hotel-list__cell hotel-list__cell--right sort-button" data-sort-by="SortByPrice" data-sort-order="">Price</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByStars" data-sort-order="">Stars</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByPool" data-sort-order="">Pool</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByRestaurant" data-sort-order="">Restaurant</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByBar" data-sort-order="">Bar</th>
-            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByDistanceToBeach" data-sort-order="">Distance beach</th>
-            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByDistanceToShopping" data-sort-order="">Distance shopping</th>
-        </tr>
-
-        <tbody class="hotel-list__result">
-            @Html.Partial("~/Features/StartPage/_HotelList.cshtml", Model.HotelList)
-        </tbody>
-
-    </table>
-
-
-</section>

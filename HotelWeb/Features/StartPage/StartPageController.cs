@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Timers;
 using System.Web.Mvc;
 using HotelWeb.Data;
 
@@ -15,24 +17,26 @@ namespace HotelWeb.Features.StartPage
 
         public ActionResult Index()
         {
-            var model =  new StartPageViewModel
-            {
-                CountryList = _redisStore.GetCountries(),
-                HotelList = GetHotels(),
-            };
-            return View("StartPage", model);
+            var model = StartPageViewModel.Create(_redisStore.GetCountries(), GetHotels(), "SortByName", "asc");
+            return View("~/Features/StartPage/StartPage.cshtml", model);
         }
 
-        public ActionResult Hotels(string sortBy = "", string sortOrder = "", string filters = "", int priceMin = int.MinValue, int priceMax = int.MaxValue)
+        public ActionResult Hotels(string sortBy = "", string sortOrder = "", string countryFilters = "", int priceMin = int.MinValue, int priceMax = int.MaxValue)
         {
-            var model = GetHotels(sortBy, sortOrder, filters, priceMin, priceMax);
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var hotelList = GetHotels(sortBy, sortOrder, countryFilters, priceMin, priceMax);
+            var model = StartPageViewModel.Create(_redisStore.GetCountries(), hotelList, sortBy, sortOrder);
+            stopWatch.Stop();
+            Trace.WriteLine("======= |||||||||||| Hotels, elapsed: " + stopWatch.ElapsedMilliseconds);
             return PartialView("~/Features/StartPage/_HotelList.cshtml", model);
         }
 
       
-        private HotelList GetHotels(string sortBy = "SortByName", string sortOrder = "asc", string filters = "", int priceMin = int.MinValue, int priceMax = int.MaxValue)
+        private HotelList GetHotels(string sortBy = "SortByName", string sortOrder = "asc", string countryFilters = "", int priceMin = int.MinValue, int priceMax = int.MaxValue)
         {
-            return _redisStore.GetHotels(sortBy, sortOrder, filters, priceMin, priceMax);
+            var hotels = _redisStore.GetHotels(sortBy, sortOrder, countryFilters, priceMin, priceMax);
+            return hotels;
         }
 
     
