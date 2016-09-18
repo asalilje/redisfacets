@@ -1,10 +1,6 @@
-﻿@stars: "\2605", "\2605\2605", "\2605\2605\2605", "\2605\2605\2605\2605", "\2605\2605\2605\2605\2605";
-
-
-.hotel-list {
+﻿.hotel-list {
     
     &__row {
-
         background-color: #f7e8fb;
 
         &:nth-of-type(2n+1) {
@@ -21,11 +17,11 @@
         padding: 4px 10px;
         border-bottom: 1px solid #E6B9F5;
         border-right: 1px solid #f1d4fa;
+        
 
         &:first-child {
             border-left: 1px solid #f1d4fa;
         }
-
 
         &--left {
             text-align: left;
@@ -41,25 +37,25 @@
 
         &--rating {
             position: relative;
-            width: 84px;
+            width: 100px;
 
             &:before {
                 content: '\2606\2606\2606\2606\2606';
                 display: block;
                 position: absolute;
-                font-size: 20px;
-                color: magenta;
-                line-height: 22px;
+                font-size: 16px;
+                color: darkmagenta;
+                line-height: 20px;
                 top: 0;
             }
 
             &:after {
-                color: magenta;
+                color: darkmagenta;
                 display: block;
                 position: absolute;
-                font-size: 20px;
+                font-size: 16px;
                 content: '';
-                line-height: 22px;
+                line-height: 20px;
                 top: 0;
             }
 
@@ -113,16 +109,17 @@
 
     &:after {
         content: '';
-        margin-left: 10px;
+        padding-right: 17px;
     }
 
     &[data-sort-order='asc']:after {
         content: '▲';
-            
+        padding-right: 0;
+
     }
 
-     &[data-sort-order='desc']:after {
+    &[data-sort-order='desc']:after {
         content: '▼';
-
+        padding-right: 0;
     }
 }

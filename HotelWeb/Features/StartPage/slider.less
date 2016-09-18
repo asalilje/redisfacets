@@ -1,0 +1,73 @@
+﻿.slider {
+    position: relative;
+    margin: 36px auto 0px auto;
+    width: 94%;
+    font-size: 14px;
+  
+    &:before {
+        display: block;
+        content: attr(data-start-range);
+        position: absolute;
+        top: 30px;
+        left: -15px;
+    }   
+
+    &:after {
+        display: block;
+        content: attr(data-end-range);
+        position: absolute;
+        top: 30px;
+        right: -15px;
+    }
+
+    &-track {
+        background-color: #f5fff7;
+        width: 100%;
+        height: 20px;
+        border-radius: 4px;
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+   &-interval {
+        background-color: darkmagenta;
+        height: 20px;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+    }
+
+    &-handle {
+        height: 30px;
+        width: 30px;
+        border-radius: 20%;
+        position: absolute;
+        background-color: magenta;
+        border: solid 1px white;
+        z-index: 1;
+        top: -5px;
+        cursor: ew-resize;
+
+        &.active {
+            background-color: #f360f3;
+            z-index: 5;
+        }
+         
+        &[data-slider-handle="min"] {
+            left: 0px;
+        }
+
+        &[data-slider-handle="max"] {
+            right: 0px;
+        }
+
+        &-input {
+            position: absolute;
+            top: -30px;
+            border: 1px solid #ccc;
+            width: 40px;
+            text-align: center;
+        }
+    }
+
+}

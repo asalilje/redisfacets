@@ -16,7 +16,7 @@
     <RootNamespace>HotelWeb</RootNamespace>
     <AssemblyName>HotelWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -100,15 +100,27 @@
     <Content Include="Content\Js\ajax.js" />
     <Content Include="Content\Js\main.js" />
     <Content Include="Features\StartPage\filter-hotels.js" />
+    <Content Include="Features\StartPage\range-slider.js" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Data\Country.cs" />
     <Compile Include="Data\CountryList.cs" />
+    <Compile Include="Data\FilterOption.cs" />
+    <Compile Include="Data\Hotel.cs" />
     <Compile Include="Data\HotelList.cs" />
+    <Compile Include="Data\HotelListExtensions.cs" />
+    <Compile Include="Data\HotelListOptions.cs" />
+    <Compile Include="Data\Range.cs" />
+    <Compile Include="Data\RedisClient.cs" />
+    <Compile Include="Data\Service.cs" />
+    <Compile Include="Data\ServiceList.cs" />
+    <Compile Include="Data\StarList.cs" />
     <Compile Include="Features\StartPage\StartPageController.cs" />
-    <Compile Include="Data\RedisStore.cs" />
     <Compile Include="App_Start\FeatureViewEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -127,6 +139,8 @@
     <Content Include="Features\StartPage\_HotelList.cshtml" />
     <Content Include="Features\StartPage\hotel-list.less" />
     <Content Include="Content\Less\layout.less" />
+    <Content Include="Features\StartPage\slider.less" />
+    <None Include="Properties\PublishProfiles\hotelweb.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -153,7 +167,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52951</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:52951/</IISUrl>
+          <IISUrl>http://HotelWeb</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,58 +1,44 @@
 ﻿import {makeRequest} from './Ajax.js';
+import RangeSlider from "./range-slider.js";
 
 class FilterHotels {
     
-    constructor() {
-        this.hotelFilterSection = document.querySelector(".hotel-filter-section");
+    constructor(element) {
+        this.element = element;
         this.sortBy = "SortByName";
         this.sortOrder = "asc";
+        this.filterLevel = 1;
         this.init();
     }
 
     init() {
         this.setupSortButtons();
         this.setupFilterButtons();
-        this.setupPriceRange();
+        this.setupRangeSliders();
     }
 
     setupFilterButtons() {
-        const filterButtons = Array.prototype.slice.call(this.hotelFilterSection.querySelectorAll(".filter-button"));
+        const filterButtons = [...this.element.querySelectorAll(".filter-button")];
         filterButtons.forEach(btn => btn.addEventListener("click", (e) => this.toggleFilter(e)));
     }
 
-    setupPriceRange() {
-        this.priceMin = this.hotelFilterSection.querySelector("input[name='priceMin']");
-        this.priceMax = this.hotelFilterSection.querySelector("input[name='priceMax']");
-        this.priceMinValue = this.hotelFilterSection.querySelector(".priceMinValue");
-        this.priceMaxValue = this.hotelFilterSection.querySelector(".priceMaxValue");
-
-        this.priceMaxValue.textContent = this.priceMax.value;
-        this.priceMinValue.textContent = this.priceMin.value;
-
-        this.priceMin.addEventListener("change", (e) =>
-        {
-            this.priceMinValue.textContent = e.target.value;
-            this.loadHotels();
-        });
-        this.priceMax.addEventListener("change", (e) =>
-        {
-            this.priceMaxValue.textContent = e.target.value;
-            this.loadHotels();
-        });
-
-    }
-
     setupSortButtons() {
-        this.sortButtons = Array.prototype.slice.call(this.hotelFilterSection.querySelectorAll(".sort-button"));
+        this.sortButtons = [...this.element.querySelectorAll(".sort-button")];
         this.sortButtons.forEach(btn => btn.addEventListener("click", (e) => this.sortList(e)));
     }
 
+    setupRangeSliders() {
+        this.rangeSliders = [...this.element.querySelectorAll(".slider")];
+        this.rangeSliders.forEach(slider => new RangeSlider(slider, () => this.loadHotels()));
+    }
+
     toggleFilter(e) {
-        if (e.target.getAttribute("data-filter-active") === "true") {
-            e.target.setAttribute("data-filter-active", "false");
+        if (e.target.getAttribute("data-filter-selected") === "true") {
+            e.target.setAttribute("data-filter-selected", "false");
         } else {
-            e.target.setAttribute("data-filter-active", "true");
+            e.target.setAttribute("data-filter-selected", "true");
         }
+        this.filterLevel = e.target.getAttribute("data-filter-level");
         this.loadHotels();
     }
 
@@ -64,24 +50,48 @@ class FilterHotels {
         this.loadHotels();
     }
 
-    getActiveFilters(filterGroup) {
-        const activeFilters = Array.prototype.slice.call(this.hotelFilterSection.querySelectorAll(`[data-filter-active='true'][data-filter-group='${filterGroup}']`));
-        const filterKeys = activeFilters.map((x) => { return x.getAttribute("data-filter-id") });
-        return filterKeys;
+    getCountryFilters() {
+        const countryFilters = [...this.element.querySelectorAll("[data-filter-selected='true'][data-filter-group='countryFilters']")];
+        const countryKeys = countryFilters.map((x) => { return x.getAttribute("data-filter-key") });
+        return countryKeys.length > 0 ? `&countryFilters=${countryKeys}` : "";
     }
 
-    getPriceRange() {
-        let priceRange = "";
-        if (this.priceMin.value !== "")
-            priceRange += `&priceMin=${this.priceMin.value}`;
-        if (this.priceMax.value !== "")
-            priceRange += `&priceMax=${this.priceMax.value}`;
-        return priceRange;
+    getServiceFilters() {
+        const serviceFilters = [...this.element.querySelectorAll("[data-filter-selected='true'][data-filter-group='serviceFilters']")];
+        const serviceKeys = serviceFilters.map((x) => { return x.getAttribute("data-filter-key") });
+        return serviceKeys.length > 0 ? `&serviceFilters=${serviceKeys}` : "";
     }
 
+    getStarFilters() {
+        const starFilters = [...this.element.querySelectorAll("[data-filter-selected='true'][data-filter-group='starFilters']")];
+        const starKeys = starFilters.map((x) => { return x.getAttribute("data-filter-key") });
+        return starKeys.length > 0 ? `&starFilters=${starKeys}` : "";
+    }
+
+    getRangeFilters() {
+        let rangeFilters = "";
+        this.rangeSliders.forEach(range => {
+            const name = range.getAttribute("data-slider-name");
+            const values = range.getAttribute("data-slider-values").split(',');
+            const totalMin = values[0];
+            const totalMax = values[values.length - 1];
+            const rangeMin = range.querySelector("input[data-slider-handle='min']").value;
+            const rangeMax = range.querySelector("input[data-slider-handle='max']").value;
+            if (rangeMin !== totalMin)
+                rangeFilters += `&${name}Min=${rangeMin}`;
+            if (rangeMax !== totalMax)
+                rangeFilters += `&${name}Max=${rangeMax}`;
+        });
+        return rangeFilters;
+    }
+
+    getResultCount() {
+        const count = parseInt(document.querySelector(".hotel-list__count").getAttribute("data-value"));
+        return isNaN(count) ? 0 : count;
+    }
 
     getUrl() {
-        const url = `/part/startpage/hotels?sortBy=${this.sortBy}&sortOrder=${this.sortOrder}&countryFilters=${this.getActiveFilters("countryFilters")}&${this.getPriceRange()}`;
+        const url = `/part/startpage/hotels?sortBy=${this.sortBy}&sortOrder=${this.sortOrder}${this.getCountryFilters()}${this.getServiceFilters()}${this.getStarFilters()}${this.getRangeFilters()}`;
         return url;
     }
 
@@ -99,7 +109,7 @@ class FilterHotels {
     }
 
     displayResult(data) {
-        this.hotelFilterSection.innerHTML = data;
+        this.element.innerHTML = data;
     }
 }
 

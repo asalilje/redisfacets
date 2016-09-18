@@ -2,7 +2,7 @@
     background-color: #f7e8fb;
 
     &__row {
-        padding: 4px 10px;
+        padding: 4px 10px 8px 10px;
         border-bottom: 1px solid #E6B9F5;
 
         &:nth-of-type(odd) {
@@ -14,25 +14,89 @@
             display: block;
             font-size: 11px;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            color: #D38CE8;
+        }
+    }
+
+    &__column {
+        display: inline-block;
+        margin-right: 20px;
+
+        &:before {
+            content: attr(data-filter-title);
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
             color: #D38CE8;
         }
     }
 }
 
 .filter-button {
+    margin-top: 4px;
     cursor: pointer;
     font-size: 14px;
     display: inline-block;
     padding: 4px 10px;
     border-radius: 3px;
     background-color: #f7e8fb;
-    border: 1px solid #E6B9F5;
+    border: 1px solid darkmagenta;
 
-    &[data-filter-active='true'] {
-        background-color: #DB82F9;
-        border: 1px solid #BB4DE0;
-        color: white;
+    &[data-filter-value='true'] {
+        &:before {
+            font-size: 15px;
+            content: '\2714';
+            color: green;
+            margin-right: 5px;
+            font-weight: bold;
+        }
     }
-   
+
+    &[data-filter-value='false'] {
+        &:before {
+            font-size: 15px;
+            content: '\2718';
+            color: red;
+            margin-right: 5px;
+            font-weight: bold;
+        }
+    }
+
+    &[data-stars]:before {
+        content: '';
+        display: inline-block;
+        font-size: 14px;
+        color: darkmagenta;
+    }
+
+    &[data-stars='1']:before {
+        content: extract(@stars, 1);
+    }
+
+    &[data-stars='2']:before {
+        content: extract(@stars, 2);
+    }
+
+    &[data-stars='3']:before {
+        content: extract(@stars, 3);
+    }
+
+    &[data-stars='4']:before {
+        content: extract(@stars, 4);
+    }
+
+    &[data-stars='5']:before {
+        content: extract(@stars, 5);
+    }
+
+
+    &[data-filter-selected='true'] {
+        background-color: darkmagenta;
+        border: 1px solid darkmagenta;
+        color: white;
+
+        &:before {
+            color: white;
+        }
+    }
 }

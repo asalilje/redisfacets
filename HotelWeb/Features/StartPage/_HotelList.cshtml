@@ -4,19 +4,79 @@
     <div class="filter-section__row" data-filter-title="Country">
         @foreach (var country in Model.CountryList.Countries)
         {
-            <a data-filter-id="@country.Key" class="filter-button" data-filter-group="countryFilters" data-filter-active="@country.IsActive">@country.Name</a>
+            <a data-filter-key="@country.Key" class="filter-button" data-filter-group="countryFilters" data-filter-selected="@country.IsSelected.ToString().ToLower()">@country.Name (@country.FacetCount)</a>
         }
     </div>
-    <div class="filter-section__row" data-filter-title="Price">
-        From: <input type="range" name="priceMin" min="@Model.PriceRange.Min" max="@Model.PriceRange.Max" step="100" value="@Model.PriceRange.Min" size="50" />
-        <span class="priceMinValue"></span>
-        <br />
-        To: <input type="range" name="priceMax" min="@Model.PriceRange.Min" max="@Model.PriceRange.Max" step="100" value="@Model.PriceRange.Max" size="50" />
-        <span class="priceMaxValue"></span>
+    <div class="filter-section__row">
+        @foreach (var service in Model.Services.Services.GroupBy(x => x.Name))
+        {
+            <div class="filter-section__column" data-filter-title="@service.Key">
+                @foreach (var value in service.ToList())
+                {
+                    <a data-filter-key="@value.Key" class="filter-button" data-filter-group="serviceFilters" data-filter-value="@value.Value.ToString().ToLower()" data-filter-selected="@value.IsSelected.ToString().ToLower()">(@value.FacetCount)</a>
+                }
+            </div>
+        }
     </div>
+
+    <div class="filter-section__row" data-filter-title="Stars">
+        @foreach (var star in Model.StarList.Stars)
+        {
+            <a data-filter-key="@star.Key" class="filter-button" data-filter-group="starFilters" data-stars="@(star.Rating)" data-filter-selected="@star.IsSelected.ToString().ToLower()">(@star.FacetCount)</a>
+        }
+    </div>
+
+    <div class="filter-section__row" data-filter-title="Price">
+        <div class="slider" data-slider-values="@Model.PriceRange.TotalCurrentMin,@Model.PriceRange.TotalCurrentMax"
+             data-slider-percentages="0,100" data-start-value="@Model.PriceRange.CurrentMin" data-end-value="@Model.PriceRange.CurrentMax" data-slider-name="price">
+
+            <input type class="slider-handle-input" data-slider-handle="min"/>
+            <input type class="slider-handle-input" data-slider-handle="max"/>
+
+            <div class="slider-track">
+                <div class="slider-interval"></div>
+                <div class="slider-handle" data-slider-handle="min"></div>
+                <div class="slider-handle" data-slider-handle="max"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="filter-section__row" data-filter-title="Distance to beach">
+        <div class="slider" data-slider-values="@Model.BeachRange.TotalCurrentMin,@Model.BeachRange.TotalCurrentMax"
+             data-slider-percentages="0,100" data-start-value="@Model.BeachRange.CurrentMin" data-end-value="@Model.BeachRange.CurrentMax" data-slider-name="beach">
+
+            <input type class="slider-handle-input" data-slider-handle="min"/>
+            <input type class="slider-handle-input" data-slider-handle="max"/>
+
+            <div class="slider-track">
+                <div class="slider-interval"></div>
+                <div class="slider-handle" data-slider-handle="min"></div>
+                <div class="slider-handle" data-slider-handle="max"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="filter-section__row" data-filter-title="Distance to shopping">
+        <div class="slider" data-slider-values="@Model.ShoppingRange.TotalCurrentMin,@Model.ShoppingRange.TotalCurrentMax"
+             data-slider-percentages="0,100" data-start-value="@Model.ShoppingRange.CurrentMin" data-end-value="@Model.ShoppingRange.CurrentMax" data-slider-name="shopping">
+
+            <input type class="slider-handle-input" data-slider-handle="min" />
+            <input type class="slider-handle-input" data-slider-handle="max" />
+
+            <div class="slider-track">
+                <div class="slider-interval"></div>
+                <div class="slider-handle" data-slider-handle="min"></div>
+                <div class="slider-handle" data-slider-handle="max"></div>
+            </div>
+
+        </div>
+    </div>
+
 </section>
 
-<h2>Total hits: @Model.HotelList.Hotels.Count()</h2>
+<h2 class="hotel-list__count" data-value="@Model.HotelList.TotalCount">Total hits: @Model.HotelList.TotalCount</h2>
 
 <section class="hotel-list">
 
@@ -25,11 +85,11 @@
             <th></th>
             <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByName" data-sort-order=@Model.HotelList.GetSortOrder("SortByName")>Name</th>
             <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByCountry" data-sort-order=@Model.HotelList.GetSortOrder("SortByCountry")>Country</th>
-            <th class="hotel-list__cell hotel-list__cell--right sort-button" data-sort-by="SortByPrice" data-sort-order=@Model.HotelList.GetSortOrder("SortByPrice")>Price</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByStars" data-sort-order=@Model.HotelList.GetSortOrder("SortByStars")>Stars</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByPool" data-sort-order=@Model.HotelList.GetSortOrder("SortByPool")>Pool</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByRestaurant" data-sort-order=@Model.HotelList.GetSortOrder("SortByRestaurant") Restaurant</th>
-            <th class="hotel-list__cell hotel-list__cell--center sort-button" data-sort-by="SortByBar" data-sort-order=@Model.HotelList.GetSortOrder("SortByBar")>Bar</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByPrice" data-sort-order=@Model.HotelList.GetSortOrder("SortByPrice")>Price</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByStars" data-sort-order=@Model.HotelList.GetSortOrder("SortByStars")>Stars</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByPool" data-sort-order=@Model.HotelList.GetSortOrder("SortByPool")>Pool</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByRestaurant" data-sort-order=@Model.HotelList.GetSortOrder("SortByRestaurant")>Restaurant</th>
+            <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByBar" data-sort-order=@Model.HotelList.GetSortOrder("SortByBar")>Bar</th>
             <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByDistanceToBeach" data-sort-order=@Model.HotelList.GetSortOrder("SortByDistanceToBeach")>Distance beach</th>
             <th class="hotel-list__cell hotel-list__cell--left sort-button" data-sort-by="SortByDistanceToShopping" data-sort-order=@Model.HotelList.GetSortOrder("SortByDistanceToShopping")>Distance shopping</th>
         </tr>
@@ -37,7 +97,7 @@
             @foreach (var hotel in Model.HotelList.Hotels)
             {
                 <tr class="hotel-list__row ">
-                    <td class="hotel-list__cell hotel-list__cell--right">@(hotel.Index + 1)</td>
+                    <td class="hotel-list__cell hotel-list__cell--right">@hotel.Index</td>
                     <td class="hotel-list__cell hotel-list__cell--left">@hotel.Name</td>
                     <td class="hotel-list__cell hotel-list__cell--left">@hotel.CountryName</td>
                     <td class="hotel-list__cell hotel-list__cell--right">@hotel.PricePerNight</td>
@@ -54,4 +114,3 @@
     </table>
 
 </section>
-
