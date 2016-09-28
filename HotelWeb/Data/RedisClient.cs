@@ -38,8 +38,8 @@ namespace HotelWeb.Data
             if (string.IsNullOrWhiteSpace(sortBy))
                 return GetSet(key);
 
-          
-            return db.Sort(key, offset, size, GetRedisSortOrder(sortOrder), GetRedisSortType(sortType), $"{sortBy}_*", new RedisValue[] {"*"}).Select(x => (string)x);
+
+            return db.Sort(key, offset, size, GetRedisSortOrder(sortOrder), GetRedisSortType(sortType), $"{sortBy}_*", new RedisValue[] { "*" }).Select(x => (string)x);
         }
 
         public static string GetString(string key)
@@ -66,24 +66,28 @@ namespace HotelWeb.Data
         {
             var db = GetDb();
             db.SetCombineAndStore(SetOperation.Union, destinationKey, sourceKeys.Select(x => (RedisKey)x).ToArray());
+            db.KeyExpire(destinationKey, TimeSpan.FromMinutes(5));
         }
 
         public static void IntersectAndStore(string destinationKey, IEnumerable<string> sourceKeys)
         {
             var db = GetDb();
             db.SetCombineAndStore(SetOperation.Intersect, destinationKey, sourceKeys.Select(x => (RedisKey)x).ToArray());
+            db.KeyExpire(destinationKey, TimeSpan.FromMinutes(5));
         }
 
         public static void UnionAndStoreSortedSet(string destinationKey, IEnumerable<string> sourceKeys)
         {
             var db = GetDb();
             db.SortedSetCombineAndStore(SetOperation.Union, destinationKey, sourceKeys.Select(x => (RedisKey)x).ToArray());
+            db.KeyExpire(destinationKey, TimeSpan.FromMinutes(5));
         }
 
         public static void IntersectAndStoreSortedSet(string destinationKey, IEnumerable<string> sourceKeys)
         {
             var db = GetDb();
             db.SortedSetCombineAndStore(SetOperation.Intersect, destinationKey, sourceKeys.Select(x => (RedisKey)x).ToArray());
+            db.KeyExpire(destinationKey, TimeSpan.FromMinutes(5));
         }
 
         public static IEnumerable<string> Intersect(IEnumerable<string> sourceKeys)
@@ -105,6 +109,7 @@ namespace HotelWeb.Data
         {
             var db = GetDb();
             db.SetCombineAndStore(SetOperation.Difference, destinationKey, sourceKeys.Select(x => (RedisKey)x).ToArray());
+            db.KeyExpire(destinationKey, TimeSpan.FromMinutes(5));
         }
 
         public static void RemoveStartingRange(string sourceKey, double toScore)
